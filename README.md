@@ -13,7 +13,8 @@
 
 On classification project, you can get the several files and you can see brief turorial from the code, 'main.cpp'.
 
-```cpp: main.cpp
+```cpp
+
 int main(void)
 {
     //set the prototxt, caffemodel, binaryproto files
