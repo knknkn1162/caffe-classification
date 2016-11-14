@@ -29,6 +29,7 @@ void Checker::all(int stride)
 	flag = true;
 }
 
+
 void Checker::filter(int stride, std::function<bool(unsigned char)> func, int threshold)
 {
 	int btm = image.rows - cropSize;

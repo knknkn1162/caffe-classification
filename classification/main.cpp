@@ -38,6 +38,8 @@ int main(void)
 	int stride = cropSize / 2;
 	//checker.all(stride);
 	int backgroundThreshold = 50;
+
+	//Checker::filter(int stride, std::function<bool(unsigned char)> func, int threshold)
 	checker.filter(stride, [=](uchar u) { return u >= backgroundThreshold; }, cropSize * cropSize * 0.25);
 
 	//predict
