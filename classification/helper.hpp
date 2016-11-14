@@ -20,6 +20,8 @@
 #include <utility>
 #include <vector>
 
+template<typename T, typename U>
+using dictionary = std::vector<std::pair<T, U>>;
 
 /*!
 * @brief read the Bitmap image.(#! force to read grayscale image)
@@ -28,6 +30,13 @@
 */
 cv::Mat readBitmap(const std::string& test_file);
 
-cv::Mat show(const cv::Mat& src, const std::vector<int>& answer, const std::vector<cv::Point> point, int cropSize);
+/*!
+* @brief draw squares with src image where we decide cropImage as label-1.
+* @param[in] src : whole images
+* @return dict : key : left-up point, value : class number
+* @return size of trained or tested images which are cropped.
+*/
+cv::Mat show(const cv::Mat& src, const dictionary<cv::Point, int>& dict, int cropSize);
+
 
 #endif  // USE_OPENCV

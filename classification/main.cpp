@@ -42,8 +42,14 @@ int main(void)
 
 	//answer
 	auto ans = lenet.getAnswer();
+	auto point = checker.getPoints();
+	dictionary<cv::Point, int> dict(ans.size());
+	for (int i = 0; i < ans.size(); i++)
+	{
+		dict[i] = std::pair<cv::Point, int>(point[i], ans[i]);
+	}
 
-	cv::Mat dst = show(image, ans, checker.getPoints(), checker.getCropSize());
+	cv::Mat dst = show(image, dict, checker.getCropSize());
 
 	return 0;
 }
