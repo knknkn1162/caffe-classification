@@ -35,7 +35,10 @@ int main(void)
 	cv::Mat image = readBitmap(test_file);
 	const int cropSize = 30;
 	Checker checker(image, cropSize);
-	checker.all(cropSize / 2);
+	int stride = cropSize / 2;
+	//checker.all(stride);
+	int backgroundThreshold = 50;
+	checker.filter(stride, [=](uchar u) { return u >= backgroundThreshold; }, cropSize * cropSize * 0.25);
 
 	//predict
 	lenet.predict(&checker);

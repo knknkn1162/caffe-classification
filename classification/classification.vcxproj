@@ -60,6 +60,7 @@
   <ItemGroup>
     <ClCompile Include="caffeclassifier.cpp" />
     <ClCompile Include="checker.cpp" />
+    <ClCompile Include="filter.cpp" />
     <ClCompile Include="helper.cpp" />
     <ClCompile Include="lenetclassifier.cpp" />
     <ClCompile Include="main.cpp" />
@@ -80,6 +81,7 @@
   <ItemGroup>
     <ClInclude Include="caffeclassifier.hpp" />
     <ClInclude Include="checker.hpp" />
+    <ClInclude Include="filter.hpp" />
     <ClInclude Include="helper.hpp" />
     <ClInclude Include="lenetclassifier.hpp" />
   </ItemGroup>

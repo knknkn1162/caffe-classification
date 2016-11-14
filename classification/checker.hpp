@@ -12,6 +12,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+#include <functional>
+
 class Checker
 {
 private:
@@ -19,6 +21,20 @@ private:
 	std::vector<cv::Point> point;
 	const int cropSize;
 	bool flag;
+
+	/*!
+	* @brief generate shape of rectangle which top-left point is given.
+	* @param[in] point position is top-left.
+	*/
+	cv::Mat generateCroppedImage(const cv::Point& point);
+
+	/*!
+	* @brief decide whether top-left point of the croppedImage is contained or not.
+	* @param[in] image (already cropped)
+	* @param[in] transform image pointer to int.
+	*/
+	template<typename Iterator>
+	int isContain(const cv::Mat& image, std::function<Iterator(int)> func);
 public:
 
 	/*!
@@ -29,10 +45,20 @@ public:
 	Checker(const cv::Mat& image, int cropSize);
 
 	/*!
-	* @brief stride the ROI, so we get
+	* @brief stride the ROI, so we get the left-top point of cropped rectangles.
 	* @param[in] stride
 	*/
 	void all(int stride);
+
+
+	/*!
+	* @brief stride the ROI, filter with the function "func" and we get the integer value.
+	  After all, we compare this with the given threshold.
+	* @param[in] stride
+	* @param[in] pred
+	* @param[in] count threshold (e.g. 30*30 sized cropped Image consists of 900pixels)
+	*/
+	void filter(int stride, std::function<bool(unsigned char)> func, int threshold);
 
 	/*!
 	* @brief getPoint
