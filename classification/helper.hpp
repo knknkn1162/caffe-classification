@@ -37,7 +37,7 @@ public:
 	* @brief transform csv file to pairs of cv::Point and integer(0 or 1)
 	* @param[in] answer_file answerfile
 	* @param[in] linedelimiter (e.g ' ' or ',' or tab)
-	* @return pairs<cv::Point, int>
+	* @return pairs<int, pairs<cv::Point, int>>
 	*/
 	static pairs<cv::Point, int> cheat(const std::string& answer_file, const char linedelimiter);
 
@@ -57,7 +57,10 @@ private:
 	* @return pairs<std::string, int>
 	*/
 	static cv::Point readPoint(const std::string& filename);
+
 };
+
+
 
 
 class Visualizer

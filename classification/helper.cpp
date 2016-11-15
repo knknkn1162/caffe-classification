@@ -12,7 +12,8 @@ cv::Mat ReadHelper::readBitmap(const std::string& test_file)
 pairs<cv::Point, int> ReadHelper::cheat(const std::string& answer_file, const char linedelimiter)
 {
 	auto csvTable = readCSV(answer_file, linedelimiter);
-	pairs<cv::Point, int> answer;
+	pairs < cv::Point, int > answer;
+
 	for (const auto& x : csvTable)
 	{
 		auto p = readPoint(x.first);
@@ -46,12 +47,13 @@ pairs<std::string, int> ReadHelper::readCSV(const std::string& answer_file, cons
 cv::Point ReadHelper::readPoint(const std::string& filename)
 {
 	cv::Point p;
-	int x, y;
+	int f, x, y;
 	std::istringstream iss(filename);
 	char ch;
-	iss >> ch >> x >> ch >> y;
+	iss >> f >> ch >> x >> ch >> y;
 	return cv::Point(x, y);
 }
+
 
 
 cv::Mat Visualizer::show(const cv::Mat& src, const pairs<cv::Point, int>& dict, int cropSize)
