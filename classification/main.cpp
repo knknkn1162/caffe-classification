@@ -20,6 +20,7 @@
 //usage
 int main(void)
 {
+
 	const string directory = "C:\\dev\\caffe\\caffe-windows";
 
 	const string model_file = directory + "\\examples\\mytest\\lenet\\deploy.prototxt";
@@ -28,17 +29,20 @@ int main(void)
 
 	const string test_file = directory + "\\data\\mytest\\data\\040.bmp";
 
+	const string answer_file = directory + "\\data\\mytest\\answer.txt";
+
 	//create classifier
 	LenetClassifier lenet(model_file, trained_file, mean_file);
 
 	//set env/image
-	cv::Mat image = readBitmap(test_file);
+	cv::Mat image = ReadHelper::readBitmap(test_file);
 	const int cropSize = 30;
 	Checker checker(image, cropSize);
-	int stride = cropSize / 2;
-	//checker.all(stride);
-	int backgroundThreshold = 50;
 
+	//checker.all(stride);
+	// or you can set lambda function:
+	int stride = cropSize / 2;
+	int backgroundThreshold = 50;
 	//Checker::filter(int stride, std::function<bool(unsigned char)> func, int threshold)
 	checker.filter(stride, [=](uchar u) { return u >= backgroundThreshold; }, cropSize * cropSize * 0.25);
 
@@ -48,13 +52,16 @@ int main(void)
 	//answer
 	auto ans = lenet.getAnswer();
 	auto point = checker.getPoints();
-	dictionary<cv::Point, int> dict(ans.size());
+	pairs<cv::Point, int> pred(ans.size());
 	for (int i = 0; i < ans.size(); i++)
 	{
-		dict[i] = std::pair<cv::Point, int>(point[i], ans[i]);
+		pred[i] = std::pair<cv::Point, int>(point[i], ans[i]);
 	}
 
-	cv::Mat dst = show(image, dict, checker.getCropSize());
+	//load answer_file
+	auto answer = ReadHelper::cheat(answer_file, ' ');
+	//compare  prediction and answer. Check this with ImageWatch!!
+	cv::Mat dst = Visualizer::show(image, pred, answer,  checker.getCropSize());
 
 	return 0;
 }
