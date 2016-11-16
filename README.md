@@ -14,11 +14,28 @@ caffe-windows:
     mytest:
 	  - mean.binaryproto
       answer:
-        - 00001.txt
+        - 00001.txt # see content
 		- 00002.txt
 		- ..
 		- 00040.txt
-      data:
+      src:
+	    00001: # All images are 30*30 size.
+		  binary:
+		    - x000y000.bmp
+		  - x000y000.bmp
+		  - ...
+		  - x600y1000.bmp
+	    00001:
+		  - x000y000.bmp
+		  - ...
+		  - x600y1000.bmp
+		  binary:
+		    - x000y000.bmp
+		    - ...
+		    - x570y970.bmp
+		00002:
+		00040:
+      data: # All images are W*H size
 	    - 00001.bmp
 		- 00002.bmp
 		- ..
@@ -32,6 +49,24 @@ caffe-windows:
 	  - mytest_iter_100000.caffemodel
 	  - mytest_iter_100000.solverstate
 ```
+
+### content
+
+```txt: ../data/answer/00001.txt
+x000y000.bmp 0
+x015y000.bmp 0
+x030y000.bmp 0
+x045y000.bmp 0
+x060y000.bmp 0
+x075y000.bmp 0
+x090y000.bmp 0
+x105y000.bmp 0
+x120y000.bmp 0
+x135y000.bmp 0
+x150y000.bmp 0
+x165y000.bmp 0
+```
+
 
 ## Comment
 
