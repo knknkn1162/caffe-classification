@@ -6,6 +6,33 @@
 + need files "~/windows-live/libcaffe/*"
 + I tried to configrate mininum projects, but you maybe reduce the size or files.
 
+## Directory configuration
+
+```yml
+caffe-windows:
+  data:
+    mytest:
+	  - mean.binaryproto
+      answer:
+        - 00001.txt
+		- 00002.txt
+		- ..
+		- 00040.txt
+      data:
+	    - 00001.bmp
+		- 00002.bmp
+		- ..
+		- 00040.bmp
+  windows-live:
+    classification:
+  example:
+    lenet:
+	  - deploy.prototxt
+	caffemodel:
+	  - mytest_iter_100000.caffemodel
+	  - mytest_iter_100000.solverstate
+```
+
 ## Comment
 
 1. Add the libcaffe.lib, caffe.lib.

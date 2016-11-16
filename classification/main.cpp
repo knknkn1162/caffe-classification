@@ -31,11 +31,13 @@ int main(void)
 	const string trained_file = directory + "\\examples\\mytest\\lenet\\caffemodel\\mytest_iter_100000.caffemodel";
 	const string mean_file = directory + "\\data\\mytest\\mean.binaryproto";
 
-	//const string test_file = directory + "\\data\\mytest\\data\\040.bmp";
+
 	const int fileNum = 40;
 	const string test_dir = directory + "\\data\\mytest\\data";
-	//prepare cropped - class number in advance.
-	//const string answer_file = directory + "\\data\\mytest\\answer\\answer.txt";
+	const string answer_dir = directory + "\\data\\mytest\\answer";
+
+	const string save_dir = directory + "\\data\\mytest\\result";
+
 
 	//create classifier
 	LenetClassifier lenet(model_file, trained_file, mean_file);
@@ -44,7 +46,7 @@ int main(void)
 	{
 		ostringstream oss;
 		oss << std::setfill('0') << std::setw(5) << std::right << i;
-		string test_file = directory + oss.str() + ".bmp";
+		string test_file = test_dir + "\\" +oss.str() + ".bmp";
 
 		//set env/image
 		cv::Mat image = ReadHelper::readBitmap(test_file);
@@ -71,12 +73,15 @@ int main(void)
 		}
 
 		//load answer_file(to evalate)
-		string answer_file = directory + "\\answer\\" + oss.str() + ".txt";
+		std::string answer_file = answer_dir + "\\" + oss.str() + ".txt";
 		auto answer = ReadHelper::cheat(answer_file, ' ');
 
 		//compare  prediction with answer. Check this with ImageWatch!!
 		cv::Mat dst = Visualizer::show(image, pred, answer, checker.getCropSize());
 
+		// save the image
+		const string save_file = save_dir +"\\" + oss.str() + ".bmp";
+		cv::imwrite(save_file, dst);
 	}
 
 	return 0;

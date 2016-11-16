@@ -30,10 +30,8 @@ pairs<std::string, int> ReadHelper::readCSV(const std::string& answer_file, cons
 
 	pairs<std::string, int> res;
 
-	while (!reading_file.eof())
+	while (std::getline(reading_file, reading_line_buffer))
 	{
-		// read by line
-		std::getline(reading_file, reading_line_buffer);
 		std::string buf1, buf2;
 		std::istringstream line_separater(reading_line_buffer);
 		std::getline(line_separater, buf1, linedelimiter);
@@ -47,10 +45,10 @@ pairs<std::string, int> ReadHelper::readCSV(const std::string& answer_file, cons
 cv::Point ReadHelper::readPoint(const std::string& filename)
 {
 	cv::Point p;
-	int f, x, y;
+	int x, y;
 	std::istringstream iss(filename);
 	char ch;
-	iss >> f >> ch >> x >> ch >> y;
+	iss >> ch>> x >> ch >> y;
 	return cv::Point(x, y);
 }
 
