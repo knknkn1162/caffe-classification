@@ -25,6 +25,7 @@ caffe-windows:
 		- 00040.bmp
   windows-live:
     classification:
+	- setting.ini
   example:
     lenet:
 	  - deploy.prototxt
