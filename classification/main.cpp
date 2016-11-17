@@ -17,27 +17,29 @@
 #include "lenetclassifier.hpp"
 #include "helper.hpp"
 
-//#include <boost/property_tree/ptree.hpp>
-//#include <boost/property_tree/ini_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ini_parser.hpp>
 
 
 //usage
 int main(void)
 {
+	boost::property_tree::ptree pt;
+	read_ini("..\\setting.ini", pt);
 
-	const string directory = "C:\\dev\\caffe\\caffe-windows";
+	string directory = pt.get_optional<std::string>("Root.directory").get();
 
-	const string model_file = directory + "\\examples\\mytest\\lenet\\deploy.prototxt";
-	const string trained_file = directory + "\\examples\\mytest\\lenet\\caffemodel\\mytest_iter_100000.caffemodel";
-	const string mean_file = directory + "\\data\\mytest\\mean.binaryproto";
+	const string model_file = directory + pt.get<std::string>("Model.path");
+	const string trained_file = directory + pt.get<std::string>("Train.path");
+	const string mean_file = directory + pt.get<std::string>("Mean.path");
 
 
-	const int fileNum = 40;
-	const string test_dir = directory + "\\data\\mytest\\data";
-	const string answer_dir = directory + "\\data\\mytest\\answer";
+	const string test_dir = directory + pt.get<std::string>("Check.test");
+	const string answer_dir = directory + pt.get<std::string>("Check.answer");
 
-	const string save_dir = directory + "\\data\\mytest\\result";
+	const string save_dir = directory + pt.get<std::string>("Check.save");
 
+	const int fileNum = pt.get<int>("Check.number");
 
 	//create classifier
 	LenetClassifier lenet(model_file, trained_file, mean_file);

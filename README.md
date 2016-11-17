@@ -18,23 +18,6 @@ caffe-windows:
 		- 00002.txt
 		- ..
 		- 00040.txt
-      src:
-	    00001: # All images are 30*30 size.
-		  binary:
-		    - x000y000.bmp
-		  - x000y000.bmp
-		  - ...
-		  - x600y1000.bmp
-	    00001:
-		  - x000y000.bmp
-		  - ...
-		  - x600y1000.bmp
-		  binary:
-		    - x000y000.bmp
-		    - ...
-		    - x570y970.bmp
-		00002:
-		00040:
       data: # All images are W*H size
 	    - 00001.bmp
 		- 00002.bmp
@@ -67,6 +50,7 @@ x150y000.bmp 0
 x165y000.bmp 0
 ```
 
+Note) this images are all 30*30 cropped image files.
 
 ## Comment
 
