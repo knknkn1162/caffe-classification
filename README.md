@@ -39,7 +39,7 @@ caffe-windows:
 
 ### content
 
-```txt: ../data/answer/00001.txt
+```txt
 x000y000.bmp 0
 x015y000.bmp 0
 x030y000.bmp 0
@@ -66,50 +66,72 @@ On classification project, you can get the several files and you can see brief t
 ```cpp
 
 //usage
+/usage
 int main(void)
 {
+	//read setting.ini and put the data.
+	boost::property_tree::ptree pt;
+	read_ini("..\\setting.ini", pt);
 
-	const string directory = "C:\\dev\\caffe\\caffe-windows";
+	string directory = pt.get_optional<std::string>("Root.directory").get();
 
-	const string model_file = directory + "\\examples\\mytest\\lenet\\deploy.prototxt";
-	const string trained_file = directory + "\\examples\\mytest\\lenet\\caffemodel\\mytest_iter_100000.caffemodel";
-	const string mean_file = directory + "\\data\\mytest\\mean.binaryproto";
+	const string model_file = directory + pt.get<std::string>("Model.path");
+	const string trained_file = directory + pt.get<std::string>("Train.path");
+	const string mean_file = directory + pt.get<std::string>("Mean.path");
 
-	const string test_file = directory + "\\data\\mytest\\data\\040.bmp";
 
-	const string answer_file = directory + "\\data\\mytest\\answer.txt";
+	const string test_dir = directory + pt.get<std::string>("Check.test");
+	const string answer_dir = directory + pt.get<std::string>("Check.answer");
+
+	const string save_dir = directory + pt.get<std::string>("Check.save");
+
+	const int fileNum = pt.get<int>("Check.number");
 
 	//create classifier
 	LenetClassifier lenet(model_file, trained_file, mean_file);
 
-	//set env/image
-	cv::Mat image = ReadHelper::readBitmap(test_file);
-	const int cropSize = 30;
-	Checker checker(image, cropSize);
-
-	//checker.all(stride);
-	// or you can set lambda function:
-	int stride = cropSize / 2;
-	int backgroundThreshold = 50;
-	//Checker::filter(int stride, std::function<bool(unsigned char)> func, int threshold)
-	checker.filter(stride, [=](uchar u) { return u >= backgroundThreshold; }, cropSize * cropSize * 0.25);
-
-	//predict
-	lenet.predict(&checker);
-
-	//answer
-	auto ans = lenet.getAnswer();
-	auto point = checker.getPoints();
-	pairs<cv::Point, int> pred(ans.size());
-	for (int i = 0; i < ans.size(); i++)
+	for (int i = 1; i <= fileNum; i++)
 	{
-		pred[i] = std::pair<cv::Point, int>(point[i], ans[i]);
-	}
+		ostringstream oss;
+		oss << std::setfill('0') << std::setw(5) << std::right << i;
+		string test_file = test_dir + "\\" +oss.str() + ".bmp";
 
-	//load answer_file
-	auto answer = ReadHelper::cheat(answer_file, ' ');
-	//compare  prediction and answer. Check this with ImageWatch!!
-	cv::Mat dst = Visualizer::show(image, pred, answer,  checker.getCropSize());
+		//set env/image
+		cv::Mat image = ReadHelper::readBitmap(test_file);
+		const int cropSize = 30;
+		Checker checker(image, cropSize);
+
+		//checker.all(stride);
+		// or you can set lambda function:
+		int stride = cropSize / 2;
+		int backgroundThreshold = 50;
+		//type of std::function<bool(unsigned char)>
+		using Type = unsigned char;
+		checker.filter<Type>(stride, [=](Type u) { return u >= backgroundThreshold; }, cropSize * cropSize * 0.25);
+
+		//predict
+		lenet.predict(&checker);
+
+		//answer
+		auto ans = lenet.getAnswer();
+		auto point = checker.getPoints();
+		pairs<cv::Point, int> prediction(ans.size());
+		for (int i = 0; i < ans.size(); i++)
+		{
+			prediction[i] = std::pair<cv::Point, int>(point[i], ans[i]);
+		}
+
+		//load answer_file(to evalate)
+		std::string answer_file = answer_dir + "\\" + oss.str() + ".txt";
+		auto answer = ReadHelper::cheat(answer_file, ' ');
+
+		//compare  prediction with answer. Check this with ImageWatch!!
+		cv::Mat dst = Visualizer::show(image, prediction, answer, checker.getCropSize());
+
+		// save the image
+		const string save_file = save_dir +"\\" + oss.str() + ".bmp";
+		cv::imwrite(save_file, dst);
+	}
 
 	return 0;
 }

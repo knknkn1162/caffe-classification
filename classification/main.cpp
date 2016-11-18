@@ -24,6 +24,7 @@
 //usage
 int main(void)
 {
+	//read setting.ini and put the data.
 	boost::property_tree::ptree pt;
 	read_ini("..\\setting.ini", pt);
 
