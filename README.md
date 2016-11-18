@@ -36,7 +36,7 @@ caffe-windows:
 
 ### content
 
-```txt: ../data/answer/00001.txt
+```txt:
 x000y000.bmp 0
 x015y000.bmp 0
 x030y000.bmp 0
