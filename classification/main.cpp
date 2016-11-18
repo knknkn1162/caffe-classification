@@ -59,8 +59,9 @@ int main(void)
 		// or you can set lambda function:
 		int stride = cropSize / 2;
 		int backgroundThreshold = 50;
-		//Checker::filter(int stride, std::function<bool(unsigned char)> func, int threshold)
-		checker.filter(stride, [=](uchar u) { return u >= backgroundThreshold; }, cropSize * cropSize * 0.25);
+		//type of std::function<bool(unsigned char)>
+		using Type = unsigned char;
+		checker.filter<Type>(stride, [=](Type u) { return u >= backgroundThreshold; }, cropSize * cropSize * 0.25);
 
 		//predict
 		lenet.predict(&checker);
@@ -68,10 +69,10 @@ int main(void)
 		//answer
 		auto ans = lenet.getAnswer();
 		auto point = checker.getPoints();
-		pairs<cv::Point, int> pred(ans.size());
+		pairs<cv::Point, int> prediction(ans.size());
 		for (int i = 0; i < ans.size(); i++)
 		{
-			pred[i] = std::pair<cv::Point, int>(point[i], ans[i]);
+			prediction[i] = std::pair<cv::Point, int>(point[i], ans[i]);
 		}
 
 		//load answer_file(to evalate)
@@ -79,7 +80,7 @@ int main(void)
 		auto answer = ReadHelper::cheat(answer_file, ' ');
 
 		//compare  prediction with answer. Check this with ImageWatch!!
-		cv::Mat dst = Visualizer::show(image, pred, answer, checker.getCropSize());
+		cv::Mat dst = Visualizer::show(image, prediction, answer, checker.getCropSize());
 
 		// save the image
 		const string save_file = save_dir +"\\" + oss.str() + ".bmp";

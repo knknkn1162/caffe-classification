@@ -13,6 +13,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 #include <functional>
+#include "filter.hpp" //for Checker::filter
 
 class Checker
 {
@@ -28,13 +29,6 @@ private:
 	*/
 	cv::Mat generateCroppedImage(const cv::Point& point);
 
-	/*!
-	* @brief decide whether top-left point of the croppedImage is contained or not.
-	* @param[in] image (already cropped)
-	* @param[in] transform image pointer to int.
-	*/
-	template<typename Iterator>
-	int isContain(const cv::Mat& image, std::function<Iterator(int)> func);
 public:
 
 	/*!
@@ -54,11 +48,13 @@ public:
 	/*!
 	* @brief stride the ROI, filter with the function "func" and we get the integer value.
 	  After all, we compare this with the given threshold.
+	* @tparam Pred signature is bool(T), T is type parameter.
 	* @param[in] stride
 	* @param[in] pred
 	* @param[in] count threshold (e.g. 30*30 sized cropped Image consists of 900pixels)
 	*/
-	void filter(int stride, std::function<bool(unsigned char)> func, int threshold);
+	template<typename T>
+	void filter(int stride, std::function<bool(T)> func, int threshold);
 
 	/*!
 	* @brief getPoint
@@ -83,3 +79,21 @@ public:
 	bool isValidate() const;
 };
 
+template<typename T>
+void Checker::filter(int stride, std::function<bool(T)> func, int threshold)
+{
+	int btm = image.rows - cropSize;
+	int right = image.cols - cropSize;
+	for (int x = 0; x < right; x += stride)
+	{
+		for (int y = 0; y < btm; y += stride)
+		{
+			cv::Point p(x, y);
+			cv::Mat croppedImage = generateCroppedImage(p);
+			if (count_iterators(croppedImage.begin<T>(), croppedImage.end<T>(), func) >= threshold)
+			{
+				point.push_back(p);
+			}
+		}
+	}
+}

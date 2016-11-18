@@ -2,9 +2,12 @@
 
 ## Preparation
 + Build caffe solution (https://github.com/Microsoft/caffe/tree/master/windows/classification.) in advance and you can get the lib. and obj. files.
-+ I want to classify 2-class problem(collect image or not), so I changed the code from 
-+ need files "~/windows-live/libcaffe/*"
++ I want to classify 2-class problem(collect image or not), so I changed the code from classification project.
 + I tried to configrate mininum projects, but you maybe reduce the size or files.
+
+## Requirements
++ boost/property_tree(1.60.0) [read setting.ini]
++ need files "~/windows-live/libcaffe/*"
 
 ## Directory configuration
 

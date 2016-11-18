@@ -1,5 +1,4 @@
 #include "checker.hpp"
-#include "filter.hpp"
 
 Checker::Checker(const cv::Mat& image, int cropSize) : image(image), cropSize(cropSize), flag(false)
 {
@@ -29,24 +28,6 @@ void Checker::all(int stride)
 	flag = true;
 }
 
-
-void Checker::filter(int stride, std::function<bool(unsigned char)> func, int threshold)
-{
-	int btm = image.rows - cropSize;
-	int right = image.cols - cropSize;
-	for (int x = 0; x < right; x += stride)
-	{
-		for (int y = 0; y < btm; y += stride)
-		{
-			cv::Point p(x, y);
-			cv::Mat croppedImage = generateCroppedImage(p);
-			if (count_iterators(croppedImage.begin<unsigned char>(), croppedImage.end<unsigned char>(), func) >= threshold)
-			{
-				point.push_back(p);
-			}
-		}
-	}
-}
 
 
 std::vector<cv::Point> Checker::getPoints()
