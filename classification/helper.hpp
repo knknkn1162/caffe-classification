@@ -9,6 +9,12 @@
 */
 #pragma once
 
+#ifdef CAFFEDLL
+#define CAFFEDLL_API __declspec(dllexport)
+#else
+#define CAFFEDLL_API __declspec(dllimport)
+#endif
+
 #ifdef USE_OPENCV
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -23,7 +29,7 @@ template<typename T, typename U>
 using pairs = std::vector<std::pair<T, U>>;
 
 
-class ReadHelper
+class CAFFEDLL_API ReadHelper
 {
 public:
 	/*!

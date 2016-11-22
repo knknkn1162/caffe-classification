@@ -2,7 +2,7 @@
 #include <fstream> //ifstream, ofstream
 #include <istream> //istringstream
 #include <algorithm>
-
+#include <stdexcept>
 
 cv::Mat ReadHelper::readBitmap(const std::string& test_file)
 {
