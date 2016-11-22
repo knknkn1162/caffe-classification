@@ -77,34 +77,33 @@ cv::Mat Visualizer::show(const cv::Mat& src, const pairs<cv::Point, int>& pred, 
 	auto red = cv::Scalar(0, 0, 200);
 	auto blue = cv::Scalar(200, 0, 12);
 	auto green = cv::Scalar(11, 218, 81);
-	auto drawRectangle = [&](cv::Point point, cv::Scalar color){ cv::rectangle(dst, cv::Rect(point.x, point.y, cropSize, cropSize), color, 3, 8); };
+	auto drawRectangle = [&](cv::Point point, cv::Scalar color, int thickness){ cv::rectangle(dst, cv::Rect(point.x, point.y, cropSize, cropSize), color, thickness, 8); };
+
 	for (auto it = pred.begin(); it != pred.end(); ++it) {
-		//match pred and answer, if match, flag equals true.
-		bool flag = std::find(answer.begin(), answer.end(), std::pair<cv::Point, int>(it->first, it->second)) != answer.end();
+
 		cv::Point point = it->first;
-		if (flag && it->second == 1)
+		auto draw = [&](cv::Scalar color, int thickness) { drawRectangle(point, color, thickness); };
+		//if the answer is 1
+		if (std::find(answer.begin(), answer.end(), std::pair<cv::Point, int>(it->first, 1)) != answer.end())
 		{
-			drawRectangle(point, green);
-		}
-		else if (!flag)
-		{
-			//if second Kind occurs.
 			if (it->second == 1)
 			{
-				drawRectangle(point, red);
+				draw(green, 3);
+			}
+			else
+			{
+				// if first kind occurs
+				draw(blue, 1);
 			}
 		}
-	}
-
-	for (auto it = answer.begin(); it != answer.end(); ++it)
-	{
-		//if the first kind occurs
-		if (it->second == 1 && (
-			std::find(pred.begin(), pred.end(), std::pair<cv::Point, int>(it->first, 0)) == pred.end() &&
-			std::find(pred.begin(), pred.end(), std::pair<cv::Point, int>(it->first, 1)) == pred.end())
-			)
+		//answer is 0
+		else
 		{
-			drawRectangle(it->first, blue);
+			// if second kind occurs
+			if (it->second == 1)
+			{
+				draw(red, 3);
+			}
 		}
 	}
 

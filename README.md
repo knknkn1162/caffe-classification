@@ -16,6 +16,8 @@ caffe-windows:
   data:
     mytest:
 	  - mean.binaryproto
+	  - param.json # for setting cropping image by crop.py
+	  - crop.py
       answer:
         - 00001.txt # see content
 		- 00002.txt
