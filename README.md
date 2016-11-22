@@ -39,7 +39,7 @@ caffe-windows:
 
 ### content
 
-```txt
+```txt:
 x000y000.bmp 0
 x015y000.bmp 0
 x030y000.bmp 0
@@ -66,7 +66,6 @@ On classification project, you can get the several files and you can see brief t
 ```cpp
 
 //usage
-/usage
 int main(void)
 {
 	//read setting.ini and put the data.
