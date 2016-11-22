@@ -64,7 +64,6 @@ Note) this images are all 30*30 cropped image files.
 On classification project, you can get the several files and you can see brief turorial from the code, 'main.cpp'.
 
 ```cpp
-
 //usage
 int main(void)
 {
